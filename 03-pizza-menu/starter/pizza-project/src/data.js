@@ -42,5 +42,3 @@ const pizzaData = [
     soldOut: false,
   },
 ];
-
-import React from 'react'
