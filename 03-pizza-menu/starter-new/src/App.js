@@ -44,28 +44,44 @@ const pizzaData = [
 ];
 
 function Menu() {
+  const exist = pizzaData.length;
   return (
-  <main className="menu" >
-    <h2>Our Menu</h2>
-    <ul className='pizzas'>
-    {pizzaData.map((e)=>{
-      return <Pizza PizzaObj = {e} />
-    })}
-    </ul>
-  </main>)
+    <main className="menu">
+      <h2>Our Menu</h2>
+
+      {exist ? (
+        <>
+        <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all organic, all delicious.
+        </p>
+        <ul className='pizzas'>
+          {pizzaData.map((e) => {
+            return <Pizza key={e.name} PizzaObj={e} />;
+          })}
+        </ul>
+        </>
+      ) : (
+        <p>We are currently working on our Menu. Please come back later.</p>
+      )}
+    </main>
+  );
 }
 
-function  Pizza(props) {
+
+function  Pizza({PizzaObj}) {
   return (
-  <div className="pizza" >
-    <img src={props.PizzaObj.photoName}  />
+    <li className={`pizzas ${PizzaObj.soldOut? "sold-out" : ""}`} >
+      <img src={PizzaObj.photoName} alt={PizzaObj.name} />
       <div>  
-      <h3>{props.PizzaObj.name}</h3>
-      <p>{props.PizzaObj.ingredients}</p>
-      <span>$ {props.PizzaObj.price}</span>
+        <h3>{PizzaObj.name}</h3>
+        <p>{PizzaObj.ingredients}</p>
+        <span>{PizzaObj.soldOut ? "SOLD OUT" : PizzaObj.price}</span>
       </div>
-  </div>
-  )
+    </li>
+    )
+      
+  
 }
 
 export function App() {
@@ -94,21 +110,28 @@ function Header() {
 function Footer() {
   const openHours = 8
   const closeHours = 18
-  let stmt = ''
   const date = new Date().getHours()
   const time =  ( openHours < date && date < closeHours )
-
+// here we are checking the time at which the shop will be open or not 
   return (
-    <Footer className='footer'>
-      {time && (
-        <div className="order">
+    <footer className='footer'>
+      {time ? (
+        <Order closeHours = {closeHours} openHours = {openHours} />
+      ): (
+      <p>
+        you can visit us between {openHours}:00 and {closeHours}:00
+      </p>)}
+    </footer>
+  )
+}
+
+function Order ({closeHours , openHours}) {
+  return (
+    <div className="order">
           <p>
-            We are open until {closeHours}:00 Come visit us or Order online
+            We are open from {openHours}:00 and until {closeHours}:00 , Come visit us or Order online
           </p>
           <button className="btn">Order</button>
-        </div>
-
-      )}
-    </Footer>
+    </div>
   )
 }
